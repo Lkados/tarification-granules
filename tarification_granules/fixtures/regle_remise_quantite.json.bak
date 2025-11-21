@@ -1,0 +1,20 @@
+[
+    {
+        "doctype": "Regle Remise Quantite",
+        "nom_regle": "Remise 2-3 palettes",
+        "qte_min": 2,
+        "qte_max": 3,
+        "remise_montant": 5.0,
+        "actif": 1,
+        "priorite": 1
+    },
+    {
+        "doctype": "Regle Remise Quantite",
+        "nom_regle": "Remise 4+ palettes",
+        "qte_min": 4,
+        "qte_max": null,
+        "remise_montant": 15.0,
+        "actif": 1,
+        "priorite": 2
+    }
+]

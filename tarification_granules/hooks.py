@@ -83,7 +83,17 @@ app_license = "mit"
 # ------------
 
 # before_install = "tarification_granules.install.before_install"
-# after_install = "tarification_granules.install.after_install"
+after_install = "tarification_granules.setup.install.after_install"
+
+# Fixtures
+# --------
+
+# fixtures = [
+#     {
+#         "dt": "Workspace",
+#         "filters": [["module", "=", "Tarification Granules"]]
+#     }
+# ]
 
 # Uninstallation
 # ------------
@@ -137,13 +147,14 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    "Sales Order": {
+        "before_validate": "tarification_granules.controllers.pricing_hooks.apply_pricing",
+    },
+    "Sales Invoice": {
+        "before_validate": "tarification_granules.controllers.pricing_hooks.apply_pricing",
+    }
+}
 
 # Scheduled Tasks
 # ---------------

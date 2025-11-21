@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-21 06:32:44.426001",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "article_palette",
+  "col_break_1",
+  "prix_base_ht",
+  "frais_livraison",
+  "utiliser_remises_globales"
+ ],
+ "fields": [
+  {
+   "fieldname": "article_palette",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Article Palette",
+   "options": "Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "col_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "prix_base_ht",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Prix Base HT",
+   "reqd": 1
+  },
+  {
+   "description": "Calcul\u00e9 automatiquement depuis la zone",
+   "fieldname": "frais_livraison",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Frais de Livraison",
+   "read_only": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "utiliser_remises_globales",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Utiliser Remises"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-21 06:32:44.426001",
+ "modified_by": "Administrator",
+ "module": "Tarification Granules",
+ "name": "Article Tarif Palette",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

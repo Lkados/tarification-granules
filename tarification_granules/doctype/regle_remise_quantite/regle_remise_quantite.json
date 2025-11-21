@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:nom_regle",
+ "creation": "2025-01-21 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "nom_regle",
+  "qte_min",
+  "qte_max",
+  "remise_montant",
+  "actif",
+  "priorite"
+ ],
+ "fields": [
+  {
+   "fieldname": "nom_regle",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nom de la r\u00e8gle",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "qte_min",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Quantit\u00e9 minimum",
+   "reqd": 1
+  },
+  {
+   "fieldname": "qte_max",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Quantit\u00e9 maximum (vide = et plus)"
+  },
+  {
+   "fieldname": "remise_montant",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Montant de la remise (\u20ac)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "actif",
+   "fieldtype": "Check",
+   "default": "1",
+   "label": "Actif"
+  },
+  {
+   "fieldname": "priorite",
+   "fieldtype": "Int",
+   "default": "0",
+   "label": "Priorit\u00e9",
+   "description": "Ordre d'application si plusieurs r\u00e8gles correspondent"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-01-21 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Tarification Granules",
+ "name": "Regle Remise Quantite",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
