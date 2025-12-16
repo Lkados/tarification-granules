@@ -6,11 +6,13 @@ de granulés lors de la validation des commandes et factures.
 """
 
 from typing import Optional
+
 import frappe
 from frappe import _
+
 from tarification_granules.api.tarif_calculator import (
     calculate_prix_palette,
-    is_palette_article
+    is_palette_article,
 )
 
 
@@ -37,7 +39,7 @@ def apply_pricing(doc, method: Optional[str] = None) -> None:
         frappe.msgprint(
             _("Prix hérités de la commande client, pas de recalcul."),
             indicator="blue",
-            alert=True
+            alert=True,
         )
         return
 
@@ -49,7 +51,7 @@ def apply_pricing(doc, method: Optional[str] = None) -> None:
         frappe.msgprint(
             _("⚠️ Client sans zone assignée. Tarification non appliquée."),
             indicator="orange",
-            alert=True
+            alert=True,
         )
         return
 
@@ -98,7 +100,7 @@ def _apply_pricing_to_items(doc, zone: str) -> int:
                 customer=doc.customer,
                 article_palette=item.item_code,
                 quantite=int(item.qty),
-                date_reference=date_ref
+                date_reference=date_ref,
             )
 
             # Appliquer le prix calculé
@@ -114,7 +116,7 @@ def _apply_pricing_to_items(doc, zone: str) -> int:
             frappe.msgprint(
                 _("❌ Erreur tarification {0}: {1}").format(item.item_code, str(e)),
                 indicator="red",
-                alert=True
+                alert=True,
             )
 
     return items_updated
@@ -134,11 +136,9 @@ def _show_success_message(doctype: str, items_count: int, zone: str) -> None:
     doc_type_label = _("commande") if doctype == "Sales Order" else _("facture")
 
     frappe.msgprint(
-        _("✅ {0} ligne(s) de palette tarifée(s) automatiquement pour la {1} (Zone: {2})").format(
-            items_count,
-            doc_type_label,
-            zone
-        ),
+        _(
+            "✅ {0} ligne(s) de palette tarifée(s) automatiquement pour la {1} (Zone: {2})"
+        ).format(items_count, doc_type_label, zone),
         indicator="green",
-        alert=True
+        alert=True,
     )

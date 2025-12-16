@@ -3,7 +3,6 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from typing import Optional
 
 
 class TarifPalette(Document):
@@ -26,14 +25,20 @@ class TarifPalette(Document):
         if self.methode_tarification == "Prix de base + Remise quantité":
             if not self.prix_base_ht:
                 frappe.throw(
-                    _("Le prix de base HT est requis pour la méthode 'Prix de base + Remise quantité'"),
-                    exc=frappe.ValidationError
+                    _(
+                        "Le prix de base HT est requis pour la méthode "
+                        "'Prix de base + Remise quantité'"
+                    ),
+                    exc=frappe.ValidationError,
                 )
         elif self.methode_tarification == "Prix direct par palier":
             if not self.paliers_prix or len(self.paliers_prix) == 0:
                 frappe.throw(
-                    _("Au moins un palier de prix est requis pour la méthode 'Prix direct par palier'"),
-                    exc=frappe.ValidationError
+                    _(
+                        "Au moins un palier de prix est requis pour la méthode "
+                        "'Prix direct par palier'"
+                    ),
+                    exc=frappe.ValidationError,
                 )
 
     def _validate_date_range(self) -> None:
@@ -41,7 +46,7 @@ class TarifPalette(Document):
         if self.date_fin and self.date_debut and self.date_fin < self.date_debut:
             frappe.throw(
                 _("La date de fin ne peut pas être antérieure à la date de début"),
-                exc=frappe.ValidationError
+                exc=frappe.ValidationError,
             )
 
     def _validate_paliers(self) -> None:
@@ -59,8 +64,11 @@ class TarifPalette(Document):
             # Vérifier cohérence min/max
             if palier.qte_max and palier.qte_min > palier.qte_max:
                 frappe.throw(
-                    _("Palier ligne {0}: La quantité min ne peut pas être supérieure à la quantité max").format(i + 1),
-                    exc=frappe.ValidationError
+                    _(
+                        "Palier ligne {0}: La quantité min ne peut pas être "
+                        "supérieure à la quantité max"
+                    ).format(i + 1),
+                    exc=frappe.ValidationError,
                 )
 
             # Vérifier pas de chevauchement avec le suivant
@@ -71,7 +79,7 @@ class TarifPalette(Document):
                         _(
                             "Chevauchement détecté entre les paliers lignes {0} et {1}"
                         ).format(i + 1, i + 2),
-                        exc=frappe.ValidationError
+                        exc=frappe.ValidationError,
                     )
 
     def before_save(self) -> None:

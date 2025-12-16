@@ -18,19 +18,17 @@ class RegleRemiseQuantite(Document):
         """
         if self.qte_max and self.qte_min > self.qte_max:
             frappe.throw(
-                _("La quantité minimum ne peut pas être supérieure à la quantité maximum"),
-                exc=frappe.ValidationError
+                _(
+                    "La quantité minimum ne peut pas être supérieure à la quantité maximum"
+                ),
+                exc=frappe.ValidationError,
             )
 
         # Vérifier qu'il n'existe pas déjà une règle qui couvre exactement les mêmes quantités
         if not self.is_new():
             return
 
-        filters = {
-            "name": ["!=", self.name],
-            "actif": 1,
-            "qte_min": self.qte_min
-        }
+        filters = {"name": ["!=", self.name], "actif": 1, "qte_min": self.qte_min}
 
         if self.qte_max:
             filters["qte_max"] = self.qte_max
@@ -42,5 +40,5 @@ class RegleRemiseQuantite(Document):
         if existing:
             frappe.throw(
                 _("Une règle existe déjà pour cette plage de quantités"),
-                exc=frappe.ValidationError
+                exc=frappe.ValidationError,
             )

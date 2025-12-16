@@ -6,9 +6,9 @@ Ce module gère l'installation complète et automatique de l'application :
 - Import des fixtures (règles de remise par défaut)
 """
 
-import os
 import json
-from typing import List, Dict
+import os
+
 import frappe
 from frappe import _
 
@@ -48,19 +48,18 @@ def after_install() -> None:
                 "2. Importer vos zones depuis Excel via la console"
             ),
             title=_("Installation Tarification Granulés"),
-            indicator="green"
+            indicator="green",
         )
 
         frappe.logger().info("✅ Installation tarification_granules terminée")
 
     except Exception as e:
         frappe.log_error(
-            title=_("Erreur installation tarification_granules"),
-            message=str(e)
+            title=_("Erreur installation tarification_granules"), message=str(e)
         )
         frappe.throw(
             _("Erreur lors de l'installation : {0}").format(str(e)),
-            exc=frappe.ValidationError
+            exc=frappe.ValidationError,
         )
 
 
@@ -77,11 +76,7 @@ def _install_doctypes() -> None:
     """
     frappe.logger().info("📦 Installation des DocTypes...")
 
-    doctypes_order = [
-        "regle_remise_quantite",
-        "palier_prix_palette",
-        "tarif_palette"
-    ]
+    doctypes_order = ["regle_remise_quantite", "palier_prix_palette", "tarif_palette"]
 
     for doctype_name in doctypes_order:
         _install_single_doctype(doctype_name)
@@ -102,17 +97,12 @@ def _install_single_doctype(doctype_name: str) -> None:
     """
     # Construire le chemin vers le fichier JSON
     app_path = frappe.get_app_path("tarification_granules")
-    json_path = os.path.join(
-        app_path,
-        "doctype",
-        doctype_name,
-        f"{doctype_name}.json"
-    )
+    json_path = os.path.join(app_path, "doctype", doctype_name, f"{doctype_name}.json")
 
     if not os.path.exists(json_path):
         frappe.throw(
             _("Fichier DocType introuvable : {0}").format(json_path),
-            exc=FileNotFoundError
+            exc=FileNotFoundError,
         )
 
     # Charger le JSON
@@ -132,7 +122,9 @@ def _install_single_doctype(doctype_name: str) -> None:
         doc.insert(ignore_permissions=True)
         frappe.logger().info(f"✅ DocType '{doctype_display_name}' créé")
     except Exception as e:
-        frappe.logger().error(f"❌ Erreur création DocType '{doctype_display_name}': {str(e)}")
+        frappe.logger().error(
+            f"❌ Erreur création DocType '{doctype_display_name}': {str(e)}"
+        )
         raise
 
 
@@ -147,7 +139,9 @@ def _install_custom_fields() -> None:
     frappe.logger().info("🔧 Installation des custom fields...")
 
     try:
-        from tarification_granules.setup.custom_fields import setup_custom_fields
+        from tarification_granules.setup.custom_fields import \
+            setup_custom_fields
+
         setup_custom_fields()
         frappe.logger().info("✅ Custom fields installés")
     except Exception as e:

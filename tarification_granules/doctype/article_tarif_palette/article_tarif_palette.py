@@ -1,6 +1,7 @@
 """DocType Article Tarif Palette - Child table des articles dans un tarif."""
 
 from typing import TYPE_CHECKING
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
@@ -27,9 +28,7 @@ class ArticleTarifPalette(Document):
     def _validate_article_exists(self) -> None:
         """Vérifie que l'article existe."""
         if not frappe.db.exists("Item", self.article_palette):
-            frappe.throw(
-                _("L'article {0} n'existe pas").format(self.article_palette)
-            )
+            frappe.throw(_("L'article {0} n'existe pas").format(self.article_palette))
 
     def _validate_prix_positif(self) -> None:
         """Vérifie que le prix est positif."""

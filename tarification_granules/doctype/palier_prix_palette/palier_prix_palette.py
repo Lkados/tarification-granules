@@ -19,8 +19,10 @@ class PalierPrixPalette(Document):
         # Vérifier qte_min <= qte_max si défini
         if self.qte_max and self.qte_min > self.qte_max:
             frappe.throw(
-                _("La quantité minimum ne peut pas être supérieure à la quantité maximum"),
-                exc=frappe.ValidationError
+                _(
+                    "La quantité minimum ne peut pas être supérieure à la quantité maximum"
+                ),
+                exc=frappe.ValidationError,
             )
 
         # Générer description automatiquement

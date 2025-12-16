@@ -153,7 +153,7 @@ doc_events = {
     },
     "Sales Invoice": {
         "before_validate": "tarification_granules.controllers.pricing_hooks.apply_pricing",
-    }
+    },
 }
 
 # Scheduled Tasks
@@ -252,4 +252,3 @@ doc_events = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-

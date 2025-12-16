@@ -5,6 +5,7 @@ et la quantité commandée, avec support de deux méthodes de tarification.
 """
 
 from typing import Dict, Optional
+
 import frappe
 from frappe import _
 
@@ -14,7 +15,7 @@ def calculate_prix_palette(
     customer: str,
     article_palette: str,
     quantite: int = 1,
-    date_reference: Optional[str] = None
+    date_reference: Optional[str] = None,
 ) -> Dict:
     """Calcule le prix final d'une palette selon la méthode configurée.
 
@@ -71,9 +72,7 @@ def calculate_prix_palette(
 
 
 def _get_tarif_actif(
-    zone: str,
-    article_palette: str,
-    date_reference: str
+    zone: str, article_palette: str, date_reference: str
 ) -> Optional[frappe._dict]:
     """Récupère le tarif actif pour une zone et un article.
 
@@ -85,18 +84,14 @@ def _get_tarif_actif(
     Returns:
         Tuple (Document Tarif Palette, row article) ou None
     """
-    filters = {
-        "zone": zone,
-        "actif": 1,
-        "date_debut": ["<=", date_reference]
-    }
+    filters = {"zone": zone, "actif": 1, "date_debut": ["<=", date_reference]}
 
     # Chercher tous les tarifs actifs pour cette zone
     tarifs = frappe.get_all(
         "Tarif Palette",
         filters=filters,
         fields=["name", "methode_tarification", "date_debut", "date_fin"],
-        order_by="date_debut desc"
+        order_by="date_debut desc",
     )
 
     # Pour chaque tarif, chercher l'article dans la child table
@@ -114,11 +109,7 @@ def _get_tarif_actif(
     return None
 
 
-def _calculate_prix_avec_remise(
-    tarif: frappe._dict,
-    quantite: int,
-    zone: str
-) -> Dict:
+def _calculate_prix_avec_remise(tarif: frappe._dict, quantite: int, zone: str) -> Dict:
     """Calcule le prix avec méthode base + remise.
 
     Args:
@@ -151,15 +142,11 @@ def _calculate_prix_avec_remise(
         "methode": "Prix de base + Remise quantité",
         "details": details,
         "tarif_id": tarif.name,
-        "article": article_row.article_palette
+        "article": article_row.article_palette,
     }
 
 
-def _calculate_prix_par_palier(
-    tarif: frappe._dict,
-    quantite: int,
-    zone: str
-) -> Dict:
+def _calculate_prix_par_palier(tarif: frappe._dict, quantite: int, zone: str) -> Dict:
     """Calcule le prix avec méthode par paliers.
 
     Args:
@@ -192,7 +179,7 @@ def _calculate_prix_par_palier(
         "zone": zone,
         "methode": "Prix direct par palier",
         "details": palier.description or f"{palier.qte_min}+ palettes",
-        "tarif_id": tarif.name
+        "tarif_id": tarif.name,
     }
 
 
@@ -208,8 +195,15 @@ def _get_regle_remise(quantite: int) -> Optional[frappe._dict]:
     regles = frappe.get_all(
         "Regle Remise Quantite",
         filters={"actif": 1},
-        fields=["name", "nom_regle", "qte_min", "qte_max", "remise_montant", "priorite"],
-        order_by="priorite desc"
+        fields=[
+            "name",
+            "nom_regle",
+            "qte_min",
+            "qte_max",
+            "remise_montant",
+            "priorite",
+        ],
+        order_by="priorite desc",
     )
 
     for regle in regles:

@@ -6,8 +6,9 @@ Zones.xlsx contenant les zones géographiques et leurs frais de livraison.
 """
 
 from typing import Dict, List
-import openpyxl
+
 import frappe
+import openpyxl
 from frappe import _
 
 
@@ -16,7 +17,7 @@ def import_tarifs_from_zones_excel(
     file_path: str,
     article_palette: str = "PALETTE-GRANULES",
     prix_base: float = 405.0,
-    methode: str = "Prix de base + Remise quantité"
+    methode: str = "Prix de base + Remise quantité",
 ) -> Dict:
     """Importe les tarifs depuis le fichier Zones.xlsx.
 
@@ -64,12 +65,7 @@ def import_tarifs_from_zones_excel(
     zones_frais = _collect_zones_from_excel(ws)
 
     # Créer/mettre à jour les tarifs
-    result = _create_tarifs_from_zones(
-        zones_frais,
-        article_palette,
-        prix_base,
-        methode
-    )
+    result = _create_tarifs_from_zones(zones_frais, article_palette, prix_base, methode)
 
     frappe.db.commit()
 
@@ -117,7 +113,7 @@ def _create_tarifs_from_zones(
     zones_frais: Dict[str, List[float]],
     article_palette: str,
     prix_base: float,
-    methode: str
+    methode: str,
 ) -> Dict:
     """Crée ou met à jour les tarifs pour chaque zone.
 
@@ -141,10 +137,7 @@ def _create_tarifs_from_zones(
             prix_final = prix_base + frais_moyen
 
             # Chercher un tarif existant pour cette zone (indépendamment de l'article)
-            existing = frappe.db.exists("Tarif Palette", {
-                "zone": zone,
-                "actif": 1
-            })
+            existing = frappe.db.exists("Tarif Palette", {"zone": zone, "actif": 1})
 
             if existing:
                 # Tarif existe pour cette zone
@@ -162,30 +155,37 @@ def _create_tarifs_from_zones(
 
                 if not article_found:
                     # Ajouter une nouvelle ligne article
-                    tarif_doc.append("articles", {
-                        "article_palette": article_palette,
-                        "prix_base_ht": prix_final,
-                        "frais_livraison": frais_moyen,
-                        "utiliser_remises_globales": 1
-                    })
+                    tarif_doc.append(
+                        "articles",
+                        {
+                            "article_palette": article_palette,
+                            "prix_base_ht": prix_final,
+                            "frais_livraison": frais_moyen,
+                            "utiliser_remises_globales": 1,
+                        },
+                    )
 
                 tarif_doc.save(ignore_permissions=True)
                 updated += 1
             else:
                 # Créer nouveau tarif avec l'article dans la child table
-                tarif_doc = frappe.get_doc({
-                    "doctype": "Tarif Palette",
-                    "zone": zone,
-                    "methode_tarification": methode,
-                    "date_debut": frappe.utils.today(),
-                    "actif": 1,
-                    "articles": [{
-                        "article_palette": article_palette,
-                        "prix_base_ht": prix_final,
-                        "frais_livraison": frais_moyen,
-                        "utiliser_remises_globales": 1
-                    }]
-                })
+                tarif_doc = frappe.get_doc(
+                    {
+                        "doctype": "Tarif Palette",
+                        "zone": zone,
+                        "methode_tarification": methode,
+                        "date_debut": frappe.utils.today(),
+                        "actif": 1,
+                        "articles": [
+                            {
+                                "article_palette": article_palette,
+                                "prix_base_ht": prix_final,
+                                "frais_livraison": frais_moyen,
+                                "utiliser_remises_globales": 1,
+                            }
+                        ],
+                    }
+                )
                 tarif_doc.insert(ignore_permissions=True)
                 created += 1
 
@@ -194,15 +194,14 @@ def _create_tarifs_from_zones(
         except Exception as e:
             errors.append(f"{zone}: {str(e)}")
             frappe.log_error(
-                title=_("Erreur import tarif {0}").format(zone),
-                message=str(e)
+                title=_("Erreur import tarif {0}").format(zone), message=str(e)
             )
 
     return {
         "created": created,
         "updated": updated,
         "errors": errors,
-        "zones": zones_list
+        "zones": zones_list,
     }
 
 
@@ -228,10 +227,7 @@ def get_import_status(file_path: str) -> Dict:
         "total_zones": len(zones_frais),
         "zones": list(zones_frais.keys()),
         "preview": {
-            zone: {
-                "count": len(frais),
-                "frais_moyen": sum(frais) / len(frais)
-            }
+            zone: {"count": len(frais), "frais_moyen": sum(frais) / len(frais)}
             for zone, frais in zones_frais.items()
-        }
+        },
     }
